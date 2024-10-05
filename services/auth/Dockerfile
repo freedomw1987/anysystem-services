@@ -1,4 +1,4 @@
-FROM oven/bun:latest as base
+FROM oven/bun:alpine 
 WORKDIR /usr/src/app
 
 COPY package.json bun.lockb ./

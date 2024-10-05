@@ -3,7 +3,8 @@
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "bun run ./src/index.ts"
+    "dev": "bun run --watch ./src/index.ts",
+    "build": "docker build -t anysystem-service/auth --no-cache ."
   },
   "devDependencies": {
     "@types/bun": "latest",
