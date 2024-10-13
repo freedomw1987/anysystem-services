@@ -1,54 +1,28 @@
+import fs from "fs";
+import path from "path";
 import { Elysia } from "elysia";
-import { cors } from "@elysiajs/cors";
-import { swagger } from "@elysiajs/swagger";
 import { html } from "@elysiajs/html";
-//Routers
-import { authRoutes, userRoutes } from "./routers/";
+import { swagger } from "@elysiajs/swagger";
+//constrollers
+import { AuthController } from "./controllers/AuthController";
 
-const port = process.env.PORT || 8000;
+const indexHtml = fs.readFileSync(
+  path.join(__dirname, "./views/index.html"),
+  "utf-8"
+);
 
-new Elysia()
-  .use(cors())
+const app = new Elysia()
+  .use(html())
   .use(
     swagger({
-      exclude: ["/health-check", "/"],
-      documentation: {
-        servers: [
-          { url: "http://localhost:8000", description: "for development" },
-        ],
-        info: {
-          title: "AnySystem Services - Auth Service",
-          description:
-            "This is a api documentation for AnySystem Services - Auth Service",
-          version: "1.0.0",
-        },
-        tags: [
-          {
-            name: "Auth",
-            description: "Authentication management",
-          },
-          {
-            name: "User",
-            description: "User management",
-          },
-        ],
-      },
+      exclude: ["/", "/healthcheck"],
     })
   )
-  .use(html())
-  .all(
-    "/",
-    () =>
-      `
-      <h1>Welcome to AnySystem Services - Auth Service</h1>
-      <p>You can access our documentation at <a href="/swagger">/Swagger</a></p>
-    `
-  )
-  .all("/health-check", () => ({
-    status: "ok",
-  }))
-  .use(authRoutes)
-  .use(userRoutes)
-  .listen(port);
+  .use(AuthController)
+  .get("/", () => indexHtml)
+  .get("/healthcheck", () => ({ status: "OK" }))
+  .listen(3000);
 
-console.log(`Listening on http://localhost:${port}`);
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+);
