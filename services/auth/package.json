@@ -3,7 +3,8 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "prisma-update": "bunx prisma generate && bunx prisma migrate dev"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.1.1",
@@ -11,6 +12,7 @@
     "@elysiajs/swagger": "^1.1.5",
     "@prisma/client": "^5.20.0",
     "elysia": "latest",
+    "elysia-ip": "^1.0.7",
     "fs": "^0.0.1-security"
   },
   "devDependencies": {
@@ -19,3 +21,4 @@
   },
   "module": "src/index.js"
 }
+

@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  auth:
+    build: 
+      context: ./auth
+    image: anysystem-service/auth
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "3000:3000"
+    container_name: service_auth
+    restart: always
+    networks:
+      backend-001:
+      frontend-001:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+networks:
+  backend-001:
+  frontend-001:

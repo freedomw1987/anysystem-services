@@ -13,12 +13,10 @@ export const SignupSchema = t.Object({
     description: "User name",
     examples: ["John Doe"],
   }),
-  phone: t.Optional(
-    t.String({
-      description: "User phone number",
-      examples: ["+853-66297530"],
-    })
-  ),
+  phone: t.String({
+    description: "User phone number",
+    examples: ["+853-66297530"],
+  }),
   password: t.String({
     description: "User password",
     minLength: 8,
@@ -46,18 +44,37 @@ export const SignupFailureSchema = t.Object({
 
 type SignupResponse = Static<typeof SignupResponseSchema>;
 
-type SignupProps = Static<typeof SignupSchema>;
+type SignupProps = Static<typeof SignupSchema> & {
+  ip?: string;
+};
 
-export const signup = async (input: SignupProps): Promise<SignupResponse> => {
-  const user = await prisma.user.create({
-    data: {
-      ...input,
-      password: await Bun.password.hash(input.password),
-      role: "USER",
-    },
-  });
+export const signup = async (
+  input: SignupProps
+): Promise<SignupResponse | undefined> => {
+  const { ip, ...rest } = input;
+  try {
+    const user = await prisma.user.create({
+      data: {
+        ...rest,
+        password: await Bun.password.hash(input.password),
+        role: "USER",
+      },
+    });
 
-  return {
-    id: user?.id,
-  };
+    if (user?.id) {
+      await prisma.log.create({
+        data: {
+          ip,
+          userId: user.id,
+          action: "SIGNUP",
+        },
+      });
+    }
+
+    return {
+      id: user?.id,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };

@@ -3,6 +3,7 @@ import path from "path";
 import { Elysia } from "elysia";
 import { html } from "@elysiajs/html";
 import { swagger } from "@elysiajs/swagger";
+import { ip } from "elysia-ip";
 //constrollers
 import { AuthController } from "./controllers/AuthController";
 
@@ -13,9 +14,13 @@ const indexHtml = fs.readFileSync(
 
 const app = new Elysia()
   .use(html())
+  .use(ip())
   .use(
     swagger({
       exclude: ["/", "/healthcheck"],
+      documentation: {
+        tags: [{ name: "Auth", description: "Authentication API" }],
+      },
     })
   )
   .use(AuthController)
