@@ -1,10 +1,11 @@
 FROM oven/bun:latest
 WORKDIR /usr/src/app
-COPY package.json bun.lockb tsconfig.json ./
-RUN bun install --frozen-lockfile
 
+COPY package.json bun.lockb tsconfig.json ./
 COPY src .
 COPY prisma .
+RUN bun install --frozen-lockfile
+
 
 # install prisma
 RUN bunx prisma generate
