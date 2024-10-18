@@ -1,5 +1,5 @@
 {
-  "name": "email",
+  "name": "smtp",
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,7 +19,8 @@
   "devDependencies": {
     "@types/lodash": "^4.17.10",
     "@types/nodemailer": "^6.4.16",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prisma": "^5.21.1"
   },
   "module": "src/index.js"
 }

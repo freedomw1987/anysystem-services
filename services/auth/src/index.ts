@@ -15,18 +15,27 @@ const indexHtml = fs.readFileSync(
 const app = new Elysia()
   .use(html())
   .use(ip())
-  .use(
+  .use(AuthController)
+  .get("/", () => indexHtml)
+  .get("/healthcheck", () => ({ status: "OK" }));
+
+if (process.env.ENV_MODE !== "prod") {
+  app.use(
     swagger({
       exclude: ["/", "/healthcheck"],
       documentation: {
+        info: {
+          version: "1.0.0",
+          title: "Auth API",
+          description: "API for authentication",
+        },
         tags: [{ name: "Auth", description: "Authentication API" }],
       },
     })
-  )
-  .use(AuthController)
-  .get("/", () => indexHtml)
-  .get("/healthcheck", () => ({ status: "OK" }))
-  .listen(3000);
+  );
+}
+
+app.listen(3000);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

@@ -17,18 +17,26 @@ const app = new Elysia()
   .use(cors())
   .use(html())
   .use(ip())
-  .use(
+  .use(EmailController)
+  .get("/", () => indexHtml)
+  .get("/healthcheck", () => ({ status: "OK" }));
+
+if (process.env.ENV_MODE !== "prod") {
+  app.use(
     swagger({
       exclude: ["/", "/healthcheck"],
       documentation: {
+        info: {
+          version: "1.0.0",
+          title: "Email API",
+          description: "API for sending emails",
+        },
         tags: [{ name: "Email", description: "Email API" }],
       },
     })
-  )
-  .use(EmailController)
-  .get("/", () => indexHtml)
-  .get("/healthcheck", () => ({ status: "OK" }))
-  .listen(3000);
+  );
+}
+app.listen(3000);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
