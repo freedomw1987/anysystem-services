@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { ip } from "elysia-ip";
-import cron from "@elysiajs/cron";
+import { cron } from "@elysiajs/cron";
 
 import {
   SendEmailSchema,
