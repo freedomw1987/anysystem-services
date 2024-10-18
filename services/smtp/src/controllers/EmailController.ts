@@ -9,7 +9,7 @@ import {
   send,
 } from "../models/Send";
 
-import { DeliverResponseSchema, deliver } from "../models/SMTP";
+import { deliver } from "../models/SMTP";
 
 export const EmailController = new Elysia({ prefix: "/email" })
   .use(ip())
@@ -33,36 +33,6 @@ export const EmailController = new Elysia({ prefix: "/email" })
       body: SendEmailSchema,
       response: {
         200: SendEmailResponseSchema,
-        500: SendEmailFailureSchema,
-      },
-      error({ set }) {
-        set.status = 500;
-        return {
-          status: 500,
-          message: "Internal server error",
-        };
-      },
-    }
-  )
-  .post(
-    "/deliver",
-    async () => {
-      const result = await deliver();
-      if (!result) {
-        return {
-          status: 500,
-          message: "Internal server error",
-        };
-      }
-      return result;
-    },
-    {
-      detail: {
-        summary: "Send an email",
-        tags: ["Email"],
-      },
-      response: {
-        200: DeliverResponseSchema,
         500: SendEmailFailureSchema,
       },
       error({ set }) {
