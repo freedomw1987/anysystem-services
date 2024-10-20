@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { Elysia } from "elysia";
-import { html } from "@elysiajs/html";
-import { swagger } from "@elysiajs/swagger";
-import { cors } from "@elysiajs/cors";
 import { ip } from "elysia-ip";
-//Controller
-import { EmailController } from "./controllers/EmailController";
+import { html } from "@elysiajs/html";
+import { compression } from "elysia-compression";
+import { swagger } from "@elysiajs/swagger";
+//controllers
+import { OrgController } from "./controllers/OrgController";
 
 const indexHtml = fs.readFileSync(
   path.join(__dirname, "./views/index.html"),
@@ -14,10 +14,10 @@ const indexHtml = fs.readFileSync(
 );
 
 const app = new Elysia()
-  .use(cors())
-  .use(html())
+  .use(compression())
   .use(ip())
-  .use(EmailController)
+  .use(html())
+  .use(OrgController)
   .get("/", () => indexHtml)
   .get("/healthcheck", () => ({ status: "OK" }));
 
@@ -28,14 +28,15 @@ if (process.env.ENV_MODE !== "prod") {
       documentation: {
         info: {
           version: "1.0.0",
-          title: "Email API",
-          description: "API for sending emails",
+          title: "License API",
+          description: "API for license management",
         },
-        tags: [{ name: "Email", description: "Email API" }],
+        tags: [{ name: "Organization", description: "API for organizations" }],
       },
     })
   );
 }
+
 app.listen(3000);
 
 console.log(

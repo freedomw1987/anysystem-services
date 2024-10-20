@@ -3,6 +3,7 @@ import path from "path";
 import { Elysia } from "elysia";
 import { html } from "@elysiajs/html";
 import { swagger } from "@elysiajs/swagger";
+import { compression } from "elysia-compression";
 import { ip } from "elysia-ip";
 //constrollers
 import { AuthController } from "./controllers/AuthController";
@@ -15,6 +16,7 @@ const indexHtml = fs.readFileSync(
 const app = new Elysia()
   .use(html())
   .use(ip())
+  .use(compression())
   .use(AuthController)
   .get("/", () => indexHtml)
   .get("/healthcheck", () => ({ status: "OK" }));
