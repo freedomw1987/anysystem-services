@@ -30,6 +30,7 @@ model License {
   id             String       @id @default(uuid())
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
+  name           LicenseName  @default(STANDARD)
   startedAt      DateTime
   expiredAt      DateTime
   createdAt      DateTime     @default(now())
@@ -41,4 +42,10 @@ enum OrgStatus {
   PENDING
   ACTIVE
   INACTIVE
+  DELETED
+}
+
+enum LicenseName {
+  STANDARD
+  PREMIUM
 }

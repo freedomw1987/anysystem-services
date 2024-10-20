@@ -5,8 +5,10 @@ import { ip } from "elysia-ip";
 import { html } from "@elysiajs/html";
 import { compression } from "elysia-compression";
 import { swagger } from "@elysiajs/swagger";
+import { serverTiming } from "@elysiajs/server-timing";
 //controllers
 import { OrgController } from "./controllers/OrgController";
+import { LicenseController } from "./controllers/LicenseController";
 
 const indexHtml = fs.readFileSync(
   path.join(__dirname, "./views/index.html"),
@@ -15,9 +17,15 @@ const indexHtml = fs.readFileSync(
 
 const app = new Elysia()
   .use(compression())
+  .use(
+    serverTiming({
+      enabled: process.env.ENV_MODE !== "prod",
+    })
+  )
   .use(ip())
   .use(html())
   .use(OrgController)
+  .use(LicenseController)
   .get("/", () => indexHtml)
   .get("/healthcheck", () => ({ status: "OK" }));
 
@@ -31,7 +39,26 @@ if (process.env.ENV_MODE !== "prod") {
           title: "License API",
           description: "API for license management",
         },
-        tags: [{ name: "Organization", description: "API for organizations" }],
+        tags: [
+          {
+            name: "Organization",
+            description: "API for organizations management",
+          },
+          { name: "License", description: "API for licenses management" },
+        ],
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+            },
+          },
+        },
       },
     })
   );

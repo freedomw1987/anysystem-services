@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Organization` MODIFY `status` ENUM('PENDING', 'ACTIVE', 'INACTIVE', 'DELETED') NOT NULL DEFAULT 'PENDING';
