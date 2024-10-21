@@ -1,0 +1,40 @@
+service OrganizationService {
+  rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
+  rpc GetOrganization (GetOrganizationRequest) returns (Organization) {}
+  rpc UpdateOrganization (UpdateOrganizationRequest) returns (Organization) {}
+  rpc ListOrganizations (ListOrganizationsRequest) returns (ListOrganizationsResponse) {}
+}
+
+message CreateOrganizationRequest {
+  required string alias = 1;
+  required string name = 2; 
+  required string phone = 3;
+  required string email = 4;
+  required string address = 5;
+  required string country = 6;
+}
+
+message CreateOrganizationResponse {
+  string id = 1;
+}
+
+message GetOrganizationRequest {
+  required string id = 1;
+}
+
+message Organization {
+  string id = 1;
+  string alias = 2;
+  string name = 3;
+  string phone = 4;
+  string email = 5;
+  string address = 6;
+  string country = 7;
+  OrgStatus status = 8;
+}
+enum OrgStatus {
+  PENDING = 0
+  ACTIVE = 1
+  INACTIVE = 2
+  DELETED =3
+}
