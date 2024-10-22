@@ -3,28 +3,25 @@ syntax = "proto3";
 package organization;
 
 service OrganizationService {
-  rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
-  rpc GetOrganization (GetOrganizationRequest) returns (Organization) {}
-  rpc UpdateOrganization (UpdateOrganizationRequest) returns (Organization) {}
-  rpc DeleteOrganization (GetOrganizationRequest) returns (Organization) {}
+  rpc CreateOrganization(CreateOrganizationRequest)
+      returns (CreateOrganizationResponse) {}
+  rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
+  rpc DeleteOrganization(GetOrganizationRequest) returns (Organization) {}
 }
 
 message CreateOrganizationRequest {
-  required string alias = 1;
-  required string name = 2; 
-  required string phone = 3;
-  required string email = 4;
-  required string address = 5;
-  required string country = 6;
+  string alias = 1;
+  string name = 2;
+  string phone = 3;
+  string email = 4;
+  string address = 5;
+  string country = 6;
 }
 
-message CreateOrganizationResponse {
-  string id = 1;
-}
+message CreateOrganizationResponse { string id = 1; }
 
-message GetOrganizationRequest {
-  required string id = 1;
-}
+message GetOrganizationRequest { string id = 1; }
 
 message Organization {
   string id = 1;
@@ -38,18 +35,18 @@ message Organization {
 }
 
 enum OrgStatus {
-  PENDING = 0
-  ACTIVE = 1
-  INACTIVE = 2
-  DELETED = 3
+  PENDING = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+  DELETED = 3;
 }
 
 message UpdateOrganizationRequest {
-  required string id = 1;
-  required string alias = 2;
-  required string name = 3;
-  required string phone = 4;
-  required string email = 5;
-  required string address = 6;
-  required string country = 7;
+  string id = 1;
+  string alias = 2;
+  string name = 3;
+  string phone = 4;
+  string email = 5;
+  string address = 6;
+  string country = 7;
 }
