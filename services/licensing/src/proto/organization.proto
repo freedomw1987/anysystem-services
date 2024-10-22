@@ -1,8 +1,12 @@
+syntax = "proto3";
+
+package organization;
+
 service OrganizationService {
   rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse) {}
   rpc GetOrganization (GetOrganizationRequest) returns (Organization) {}
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (Organization) {}
-  rpc ListOrganizations (ListOrganizationsRequest) returns (ListOrganizationsResponse) {}
+  rpc DeleteOrganization (GetOrganizationRequest) returns (Organization) {}
 }
 
 message CreateOrganizationRequest {
@@ -32,9 +36,20 @@ message Organization {
   string country = 7;
   OrgStatus status = 8;
 }
+
 enum OrgStatus {
   PENDING = 0
   ACTIVE = 1
   INACTIVE = 2
-  DELETED =3
+  DELETED = 3
+}
+
+message UpdateOrganizationRequest {
+  required string id = 1;
+  required string alias = 2;
+  required string name = 3;
+  required string phone = 4;
+  required string email = 5;
+  required string address = 6;
+  required string country = 7;
 }
