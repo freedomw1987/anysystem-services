@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package organization;
 
-service Organization {
+service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest)
       returns (CreateOrganizationResponse) {}
   /* rpc GetOrganization(GetOrganizationRequest) returns (Organization) {} */
