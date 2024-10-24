@@ -5,12 +5,13 @@ RUN bun build src/server.ts --target node --outdir ./dist
 
 FROM node:alpine AS runner
 WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/package.json .
-COPY --from=builder /usr/src/app/node_modules .
-COPY --from=builder /usr/src/app/dist/server.js ./index.mjs
+COPY package.json .
 COPY prisma .
+COPY --from=builder /usr/src/app/dist/server.js ./index.mjs
 RUN npm install --frozen-lockfile
 RUN npx prisma generate
+
+# run the app
+USER node
 EXPOSE 50051/tcp
 ENTRYPOINT [ "node", "index.mjs" ]
-

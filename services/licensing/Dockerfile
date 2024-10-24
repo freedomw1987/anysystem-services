@@ -16,4 +16,3 @@ USER bun
 EXPOSE 3000/tcp
 EXPOSE 50051/tcp
 ENTRYPOINT [ "bun", "run", "index.ts" ]
-
