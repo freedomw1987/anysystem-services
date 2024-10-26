@@ -8,10 +8,13 @@ import {
 import {
   CreateOrganizationRequest,
   CreateOrganizationResponse,
+  GetOrganizationRequest,
+  Organization,
   OrganizationServiceService,
+  orgStatusFromJSON,
 } from "./proto/organization";
 
-import { create } from "./models/Organization";
+import { create, get } from "./models/Organization";
 
 const createOrganization = async (
   call: ServerUnaryCall<CreateOrganizationRequest, CreateOrganizationResponse>,
@@ -27,8 +30,33 @@ const createOrganization = async (
   callback(null, response);
 };
 
+const getOrganization = async (
+  call: ServerUnaryCall<GetOrganizationRequest, Organization>,
+  callback: sendUnaryData<Organization>
+) => {
+  const request = call.request;
+  const response = await get(request);
+
+  if (response instanceof Error) {
+    return callback(response);
+  }
+  if (!response) {
+    return callback(new Error("Organization not found"));
+  }
+
+  const resp: Organization = {
+    ...response,
+    status: orgStatusFromJSON(response.status),
+  };
+
+  callback(null, resp);
+};
+
 const server = new Server();
-server.addService(OrganizationServiceService, { createOrganization });
+server.addService(OrganizationServiceService, {
+  createOrganization,
+  getOrganization,
+});
 server.bindAsync(
   "0.0.0.0:50051",
   ServerCredentials.createInsecure(),

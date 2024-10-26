@@ -3,6 +3,8 @@ import {
   OrganizationServiceClient,
   CreateOrganizationRequest,
   CreateOrganizationResponse,
+  GetOrganizationRequest,
+  Organization,
 } from "./proto/organization";
 
 const SERVER_ADDRESS = "localhost:50051";
@@ -20,10 +22,23 @@ const req: CreateOrganizationRequest = {
   country: "MO",
 };
 
-client.createOrganization(req, (err, res: CreateOrganizationResponse) => {
-  if (err) {
-    console.log(err);
-    return;
+// client.createOrganization(req, (err, res: CreateOrganizationResponse) => {
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log(res);
+// });
+//
+client.getOrganization(
+  {
+    id: "0eb04016-b314-418e-80c2-a0087c7356a7",
+  },
+  (err, res: Organization) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(res);
   }
-  console.log(res);
-});
+);

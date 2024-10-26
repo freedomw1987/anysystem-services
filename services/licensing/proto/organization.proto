@@ -5,7 +5,7 @@ package organization;
 service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest)
       returns (CreateOrganizationResponse) {}
-  /* rpc GetOrganization(GetOrganizationRequest) returns (Organization) {} */
+  rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
   /* rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
    */
   /* rpc DeleteOrganization(GetOrganizationRequest) returns (Organization) {} */
@@ -22,25 +22,25 @@ message CreateOrganizationRequest {
 
 message CreateOrganizationResponse { string id = 1; }
 
-/* message GetOrganizationRequest { string id = 1; } */
+message GetOrganizationRequest { string id = 1; }
 
-/* message Organization { */
-/*   string id = 1; */
-/*   string alias = 2; */
-/*   string name = 3; */
-/*   string phone = 4; */
-/*   string email = 5; */
-/*   string address = 6; */
-/*   string country = 7; */
-/*   OrgStatus status = 8; */
-/* } */
+enum OrgStatus {
+  PENDING = 0;
+  ACTIVE = 1;
+  INACTIVE = 2;
+  DELETED = 3;
+}
 
-/* enum OrgStatus { */
-/*   PENDING = 0; */
-/*   ACTIVE = 1; */
-/*   INACTIVE = 2; */
-/*   DELETED = 3; */
-/* } */
+message Organization {
+  string id = 1;
+  string alias = 2;
+  string name = 3;
+  string phone = 4;
+  string email = 5;
+  string address = 6;
+  string country = 7;
+  OrgStatus status = 8;
+}
 
 /* message UpdateOrganizationRequest { */
 /*   string id = 1; */
