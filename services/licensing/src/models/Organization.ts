@@ -1,6 +1,6 @@
-import { t } from "elysia";
-import { type Static } from "elysia";
-import { PrismaClient, OrgStatus } from "@prisma/client";
+import { OrgStatus, PrismaClient } from "@prisma/client";
+import { type Static, t } from "elysia";
+
 const prisma = new PrismaClient();
 
 export const CreateOrgSchema = t.Object({
