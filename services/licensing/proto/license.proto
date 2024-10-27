@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package license;
+
+service LicenseService {
+  rpc CreateLicense(CreateLicenseRequest) returns (CreateLicenseResponse) {}
+  rpc CheckLicense(CheckLicenseRequest) returns (CheckLicenseResponse) {}
+}
+
+message CreateLicenseRequest {
+  string organization_id = 1;
+  LicenseName name = 2;
+  google.protobuf.Timestamp startedAt = 3;
+  google.protobuf.Timestamp expiredAt = 4;
+}
+
+enum LicenseName {
+  STANDARD = 0;
+  PREMIUM = 1;
+}
+enum LicenseStatus {
+  INACTIVE = 0;
+  ACTIVE = 1;
+  EXPIRED = 2;
+}
+
+message CreateLicenseResponse {
+  string id = 1;
+  LicenseStatus status = 2;
+}
+
+message CheckLicenseRequest {
+  string organizationId = 1;
+  string license = 2;
+}
+
+message CheckLicenseResponse {
+  string id = 1;
+  LicenseStatus status = 2;
+  google.protobuf.Timestamp startedAt = 3;
+  google.protobuf.Timestamp expiredAt = 4;
+}

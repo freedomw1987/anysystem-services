@@ -6,9 +6,9 @@ service OrganizationService {
   rpc CreateOrganization(CreateOrganizationRequest)
       returns (CreateOrganizationResponse) {}
   rpc GetOrganization(GetOrganizationRequest) returns (Organization) {}
-  /* rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
-   */
-  /* rpc DeleteOrganization(GetOrganizationRequest) returns (Organization) {} */
+  rpc UpdateOrganization(UpdateOrganizationRequest) returns (Organization) {}
+  rpc DeleteOrganization(DeleteOrganizationRequest)
+      returns (DeleteOrganizationResponse) {}
 }
 
 message CreateOrganizationRequest {
@@ -23,6 +23,8 @@ message CreateOrganizationRequest {
 message CreateOrganizationResponse { string id = 1; }
 
 message GetOrganizationRequest { string id = 1; }
+
+message DeleteOrganizationRequest { string id = 1; }
 
 enum OrgStatus {
   PENDING = 0;
@@ -42,12 +44,16 @@ message Organization {
   OrgStatus status = 8;
 }
 
-/* message UpdateOrganizationRequest { */
-/*   string id = 1; */
-/*   string alias = 2; */
-/*   string name = 3; */
-/*   string phone = 4; */
-/*   string email = 5; */
-/*   string address = 6; */
-/*   string country = 7; */
-/* } */
+message UpdateOrganizationRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string phone = 3;
+  optional string email = 4;
+  optional string address = 5;
+  optional string country = 6;
+}
+
+message DeleteOrganizationResponse {
+  int32 status = 1;
+  string message = 2;
+}
