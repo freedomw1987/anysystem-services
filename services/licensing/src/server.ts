@@ -29,9 +29,6 @@ const createOrganization = async (
   call: ServerUnaryCall<CreateOrganizationRequest, CreateOrganizationResponse>,
   callback: sendUnaryData<CreateOrganizationResponse>
 ) => {
-  if (!authenticate(call)) {
-    return callback(new Error("Unauthorized"));
-  }
   const request = call.request;
   const response = await create(request);
 
@@ -46,9 +43,6 @@ const getOrganization = async (
   call: ServerUnaryCall<GetOrganizationRequest, Organization>,
   callback: sendUnaryData<Organization>
 ) => {
-  if (!authenticate(call)) {
-    return callback(new Error("Unauthorized"));
-  }
   const request = call.request;
   if (!request.id) {
     return callback(new Error("Missing organization ID"));
