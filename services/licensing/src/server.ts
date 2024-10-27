@@ -16,10 +16,22 @@ import {
 
 import { create, get } from "./models/Organization";
 
+const authenticate = (call: ServerUnaryCall<any, any>) => {
+  const token = call.metadata.get("authorization");
+  if (!token) {
+    return new Error("Missing authorization token");
+  }
+  console.log(token);
+  return true;
+};
+
 const createOrganization = async (
   call: ServerUnaryCall<CreateOrganizationRequest, CreateOrganizationResponse>,
   callback: sendUnaryData<CreateOrganizationResponse>
 ) => {
+  if (!authenticate(call)) {
+    return callback(new Error("Unauthorized"));
+  }
   const request = call.request;
   const response = await create(request);
 
@@ -34,7 +46,13 @@ const getOrganization = async (
   call: ServerUnaryCall<GetOrganizationRequest, Organization>,
   callback: sendUnaryData<Organization>
 ) => {
+  if (!authenticate(call)) {
+    return callback(new Error("Unauthorized"));
+  }
   const request = call.request;
+  if (!request.id) {
+    return callback(new Error("Missing organization ID"));
+  }
   const response = await get(request);
 
   if (response instanceof Error) {
