@@ -57,7 +57,7 @@ export const AuthController = new Elysia({ prefix: "/auth" })
     },
     {
       detail: {
-        summary: "User signin",
+        summary: "User sign in",
         tags: ["Auth"],
       },
       body: SigninSchema,

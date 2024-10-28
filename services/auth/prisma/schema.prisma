@@ -34,15 +34,25 @@ model UserOnRole {
 }
 
 model Role {
-  id         String       @id @default(uuid())
-  name       String
-  UserOnRole UserOnRole[]
+  id               String             @id @default(uuid())
+  name             String
+  UserOnRole       UserOnRole[]
+  PermissionOnRole PermissionOnRole[]
+}
+
+model PermissionOnRole {
+  id           String     @id @default(uuid())
+  role         Role       @relation(fields: [roleId], references: [id])
+  roleId       String
+  permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId String
 }
 
 model Permission {
-  id        String   @id @default(uuid())
-  name      String
-  createdAt DateTime @default(now())
+  id               String             @id @default(uuid())
+  name             String
+  createdAt        DateTime           @default(now())
+  PermissionOnRole PermissionOnRole[]
 
   @@unique([name])
 }
