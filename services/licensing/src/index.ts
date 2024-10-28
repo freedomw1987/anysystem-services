@@ -3,7 +3,7 @@ import path from "path";
 import { Elysia } from "elysia";
 import { ip } from "elysia-ip";
 import { html } from "@elysiajs/html";
-import { compression } from "elysia-compression";
+import { compression } from "@labzzhq/compressor";
 import { swagger } from "@elysiajs/swagger";
 import { serverTiming } from "@elysiajs/server-timing";
 
@@ -17,7 +17,12 @@ const indexHtml = fs.readFileSync(
 );
 
 const app = new Elysia()
-  .use(compression())
+  .use(
+    compression({
+      compress_stream: true,
+      encodings: ["deflate", "gzip"],
+    })
+  )
   .use(
     serverTiming({
       enabled: process.env.ENV_MODE !== "prod",

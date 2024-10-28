@@ -19,21 +19,22 @@ services:
   #     frontend-001:
   #   extra_hosts:
   #     - "host.docker.internal:host-gateway"
-  # licensing:
-  #   build: 
-  #     context: ./licensing
-  #   image: anysystem-service/licensing
-  #   environment:
-  #     - DATABASE_URL=${DATABASE_URL}
-  #     - ENV_MODE=${ENV_MODE} 
-  #   ports:
-  #     - '3001:3000'
-  #   container_name: service_licensing
-  #   restart: always
-  #   networks:
-  #     backend-001:
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
+  licensing:
+    build: 
+      context: ./licensing
+    image: anysystem-service/licensing
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - ENV_MODE=${ENV_MODE} 
+      - API_TOKEN=${API_TOKEN}
+    ports:
+      - '3001:3000'
+    container_name: service_licensing
+    restart: always
+    networks:
+      backend-001:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   licensing-grpc:
     build: 
       context: ./licensing
@@ -42,6 +43,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - ENV_MODE=${ENV_MODE} 
+      - API_TOKEN=${API_TOKEN}
     ports:
       - '50051:50051'
     container_name: service_licensing_grpc
