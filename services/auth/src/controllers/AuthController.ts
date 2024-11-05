@@ -1,5 +1,4 @@
 import { Elysia } from "elysia";
-import { bearer } from "@elysiajs/bearer";
 import { jwt } from "@elysiajs/jwt";
 import { ip } from "elysia-ip";
 import { SECRET_EXPIRES, SECRET_KEY } from "../constants/config";
@@ -30,7 +29,6 @@ import {
 
 export const AuthController = new Elysia({ prefix: "/auth" })
   .use(ip())
-  .use(bearer())
   .use(
     jwt({
       name: "jwt",
@@ -68,6 +66,7 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Signup failed",
         };
       },
+      security: [],
     }
   )
   //signin
@@ -104,6 +103,7 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Login failed",
         };
       },
+      security: [],
     }
   )
   //forgot password
@@ -140,6 +140,7 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Forgot password failed",
         };
       },
+      security: [],
     }
   )
   //reset password
@@ -176,5 +177,6 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Reset password failed",
         };
       },
+      security: [],
     }
   );
