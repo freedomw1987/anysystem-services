@@ -7,6 +7,7 @@ import { compression } from "@labzzhq/compressor";
 import { ip } from "elysia-ip";
 //constrollers
 import { AuthController } from "./controllers/AuthController";
+import { ProfileController } from "./controllers/ProfileController";
 
 const indexHtml = fs.readFileSync(
   path.join(__dirname, "./views/index.html"),
@@ -23,6 +24,7 @@ const app = new Elysia()
     })
   )
   .use(AuthController)
+  .use(ProfileController)
   .get("/", () => indexHtml)
   .get("/healthcheck", () => ({ status: "OK" }));
 
@@ -34,9 +36,29 @@ if (process.env.ENV_MODE !== "prod") {
         info: {
           version: "1.0.0",
           title: "Auth API",
-          description: "API for authentication",
+          description: "API for authentication, profile management",
         },
-        tags: [{ name: "Auth", description: "Authentication API" }],
+        tags: [
+          {
+            name: "Auth",
+            description:
+              "Authentication API: for user login, signup and forgot password",
+          },
+          {
+            name: "Profile",
+            description:
+              "Profile API: for user get, update profile information",
+          },
+        ],
+        components: {
+          securitySchemes: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              description: "JWT Authorization header using the Bearer scheme.",
+            },
+          },
+        },
       },
     })
   );
