@@ -17,8 +17,8 @@ export const ProfileResponseSchema = t.Object({
     examples: ["pQXt9@example.com"],
   }),
   phone: t.String({
-    description: "User phone number",
-    examples: ["+853-66297530"],
+    description: "User phone",
+    examples: ["123456789"],
   }),
 });
 
@@ -35,18 +35,18 @@ export const ProfileFailureSchema = t.Object({
 
 type ProfileProps = {
   ip?: string;
-  token: string;
+  id: string;
 };
 
 type ProfileResponse = Static<typeof ProfileResponseSchema>;
 
 export const profile = async ({
-  token,
+  id,
 }: ProfileProps): Promise<ProfileResponse | undefined> => {
   try {
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
       where: {
-        token,
+        id,
       },
     });
     if (!user) {

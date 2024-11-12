@@ -17,8 +17,6 @@ model User {
   status      UserStatus   @default(REGISTERED)
   accesslogs  Log[]
   userOnRoles UserOnRole[]
-  token       String?
-  expiresAt   DateTime?
 
   @@index([phone], map: "User_phone_idx")
   @@index([email], map: "User_email_idx")

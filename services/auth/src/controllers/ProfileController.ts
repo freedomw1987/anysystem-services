@@ -28,14 +28,22 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
   //profile
   .get(
     "",
-    async ({ bearer }) => {
+    async ({ bearer, jwt, ip }) => {
       if (!bearer) {
         return {
           status: 401,
           message: "Unauthorized",
         };
       }
-      const user = await profile({ token: bearer });
+      const p = await jwt.verify(bearer);
+      if (!p) {
+        return {
+          status: 401,
+          message: "Unauthorized",
+        };
+      }
+
+      const user = await profile({ id: p?.id as string, ip });
       if (!user) {
         return {
           status: 500,
@@ -47,7 +55,8 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
     {
       detail: {
         summary: "Get User profile",
-        description: "Get User profile, requires Bearer token",
+        description:
+          "Get User profile, requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Profile"],
       },
       response: {
@@ -76,14 +85,25 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
   //update profile
   .put(
     "",
-    async ({ body, bearer, ip }) => {
+    async ({ jwt, body, bearer, ip }) => {
       if (!bearer) {
         return {
           status: 401,
           message: "Unauthorized",
         };
       }
-      const user = await updateProfile({ ...body, token: bearer, ip });
+
+      const p = await jwt.verify(bearer);
+      if (!p) {
+        return {
+          status: 401,
+          message: "Unauthorized",
+        };
+      }
+      const user = await updateProfile({
+        ...body,
+        id: p?.id as string,
+      });
       if (!user) {
         return {
           status: 500,
@@ -95,7 +115,8 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
     {
       detail: {
         summary: "Update User profile",
-        description: "Update User profile, requires Bearer token",
+        description:
+          "Update User profile, requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Profile"],
       },
       body: UpdateProfileSchema,

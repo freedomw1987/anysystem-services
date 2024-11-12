@@ -56,6 +56,7 @@ if (process.env.ENV_MODE !== "prod") {
               type: "http",
               scheme: "bearer",
               description: "JWT Authorization header using the Bearer scheme.",
+              bearerFormat: "JWT",
             },
           },
         },

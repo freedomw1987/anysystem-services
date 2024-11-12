@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+import { bearer } from "@elysiajs/bearer";
 import { jwt } from "@elysiajs/jwt";
 import { ip } from "elysia-ip";
 import { SECRET_EXPIRES, SECRET_KEY } from "../constants/config";
@@ -26,9 +27,11 @@ import {
   ResetPasswordFailureSchema,
   resetPassword,
 } from "../models/ResetPassword";
+import { sendEmail } from "../models/SMTP";
 
 export const AuthController = new Elysia({ prefix: "/auth" })
   .use(ip())
+  .use(bearer())
   .use(
     jwt({
       name: "jwt",
@@ -76,7 +79,6 @@ export const AuthController = new Elysia({ prefix: "/auth" })
       const user = await signin({
         ...body,
         ip,
-        token: await jwt.sign({ ...body }),
       });
       if (!user) {
         return {
@@ -84,7 +86,12 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Login failed",
         };
       }
-      return user;
+      const token = await jwt.sign({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      });
+      return { ...user, token };
     },
     {
       detail: {
@@ -113,7 +120,6 @@ export const AuthController = new Elysia({ prefix: "/auth" })
       const user = await forgotPassword({
         ...body,
         ip,
-        token: await jwt.sign({ ...body }),
       });
       if (!user) {
         return {
@@ -121,7 +127,19 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Forgot password failed",
         };
       }
-      return user;
+
+      const token = await jwt.sign({
+        id: user.id,
+      });
+
+      await sendEmail({
+        from: "info@marstree.ltd",
+        to: [user.email],
+        subject: "Forgot password",
+        content: `Hi ${user.name}, please use this link to reset your password: ${process.env.APP_URL}/reset-password?token=${token}`,
+        isHtml: false,
+      });
+      return { ...user, token };
     },
     {
       detail: {
@@ -146,11 +164,26 @@ export const AuthController = new Elysia({ prefix: "/auth" })
   //reset password
   .put(
     "/reset-password",
-    async ({ body, ip, jwt }) => {
+    async ({ bearer, body, ip, jwt }) => {
+      if (!bearer) {
+        return {
+          status: 401,
+          message: "Unauthorized",
+        };
+      }
+
+      const profile = await jwt.verify(bearer);
+
+      if (!profile) {
+        return {
+          status: 401,
+          message: "Unauthorized",
+        };
+      }
       const user = await resetPassword({
         ...body,
         ip,
-        renewToken: await jwt.sign({ id: body.id }),
+        id: profile?.id as string,
       });
       if (!user) {
         return {
@@ -158,11 +191,14 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Reset password failed",
         };
       }
+
       return user;
     },
     {
       detail: {
         summary: "User reset password",
+        description:
+          "User reset password, requires Bearer token. Please get token from POST /auth/forgot-password endpoint",
         tags: ["Auth"],
       },
       body: ResetPasswordSchema,
@@ -177,6 +213,22 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Reset password failed",
         };
       },
-      security: [],
+      security: [
+        {
+          bearerAuth: [],
+        },
+      ],
+      beforeHandle({ bearer, set }) {
+        if (!bearer) {
+          set.status = 401;
+          set.headers[
+            "WWW-Authenticate"
+          ] = `Bearer realm='sign', error="invalid_request"`;
+          return {
+            status: 401,
+            message: "Unauthorized",
+          };
+        }
+      },
     }
   );

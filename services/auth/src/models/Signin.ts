@@ -39,10 +39,6 @@ export const SigninResponseSchema = t.Object({
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
     ],
   }),
-  expiresAt: t.Date({
-    description: "User token expiration time",
-    examples: ["2022-01-01T00:00:00.000Z"],
-  }),
 });
 
 export const SigninFailureSchema = t.Object({
@@ -58,7 +54,6 @@ export const SigninFailureSchema = t.Object({
 
 type SigninProps = Static<typeof SigninSchema> & {
   ip?: string;
-  token: string;
 };
 
 type SigninResponse = Static<typeof SigninResponseSchema>;
@@ -67,7 +62,6 @@ export const signin = async ({
   email,
   password,
   ip,
-  token,
 }: SigninProps): Promise<SigninResponse | undefined> => {
   try {
     const user = await prisma.user.findFirst({
@@ -85,16 +79,6 @@ export const signin = async ({
       return;
     }
 
-    const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        token,
-        expiresAt,
-      },
-    });
     const log = await prisma.log.create({
       data: {
         ip,
@@ -108,8 +92,7 @@ export const signin = async ({
         name: user.name,
         email: user.email,
         loginAt: log.createdAt,
-        token,
-        expiresAt,
+        token: "",
       };
     }
   } catch (error) {

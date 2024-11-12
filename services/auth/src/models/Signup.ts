@@ -57,7 +57,6 @@ export const signup = async (
       data: {
         ...rest,
         password: await Bun.password.hash(input.password),
-        token: null,
       },
     });
 

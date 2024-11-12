@@ -51,7 +51,7 @@ export const UpdateProfileFailureSchema = t.Object({
 });
 
 type UpdateProfileProps = Static<typeof UpdateProfileSchema> & {
-  token: string;
+  id: string;
   ip?: string;
 };
 type UpdateProfileResponse = Static<typeof UpdateProfileResponseSchema>;
@@ -60,16 +60,16 @@ export const updateProfile = async (
   input: UpdateProfileProps
 ): Promise<UpdateProfileResponse | undefined> => {
   try {
-    const { token, ...rest } = input;
-    const user = await prisma.user.findFirst({
+    const { id, ...rest } = input;
+    let user = await prisma.user.findUnique({
       where: {
-        token,
+        id,
       },
     });
     if (!user) {
       return;
     }
-    await prisma.user.update({
+    user = await prisma.user.update({
       where: {
         id: user.id,
       },
@@ -85,7 +85,7 @@ export const updateProfile = async (
       },
     });
     return {
-      id: user.id,
+      id,
       name: user.name,
       email: user.email,
       phone: user.phone,
