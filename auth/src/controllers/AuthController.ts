@@ -158,7 +158,6 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Forgot password failed",
         };
       },
-      security: [],
     }
   )
   //reset password
@@ -200,6 +199,7 @@ export const AuthController = new Elysia({ prefix: "/auth" })
         description:
           "User reset password, requires Bearer token. Please get token from POST /auth/forgot-password endpoint",
         tags: ["Auth"],
+        security: [{ bearerAuth: [] }],
       },
       body: ResetPasswordSchema,
       response: {
@@ -213,11 +213,6 @@ export const AuthController = new Elysia({ prefix: "/auth" })
           message: "Reset password failed",
         };
       },
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
       beforeHandle({ bearer, set }) {
         if (!bearer) {
           set.status = 401;

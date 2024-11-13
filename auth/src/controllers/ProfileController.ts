@@ -58,16 +58,16 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
         description:
           "Get User profile, requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Profile"],
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
       },
       response: {
         200: ProfileResponseSchema,
         401: ProfileFailureSchema,
       },
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
       beforeHandle({ bearer, set }) {
         if (!bearer) {
           set.status = 401;
@@ -118,6 +118,11 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
         description:
           "Update User profile, requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Profile"],
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
       },
       body: UpdateProfileSchema,
       response: {
@@ -125,11 +130,6 @@ export const ProfileController = new Elysia({ prefix: "/profile" })
         500: UpdateProfileFailureSchema,
         401: ProfileFailureSchema,
       },
-      security: [
-        {
-          bearerAuth: [],
-        },
-      ],
       beforeHandle({ bearer, set }) {
         if (!bearer) {
           set.status = 401;
