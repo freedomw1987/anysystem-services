@@ -1,34 +1,14 @@
 services:
-  # auth:
-  #   build: 
-  #     context: ./auth
-  #   image: anysystem-service/auth
-  #   environment:
-  #     - DATABASE_URL=${DATABASE_URL}
-  #     - SMTP_HOST=${SMTP_HOST}
-  #     - SMTP_PORT=${SMTP_PORT}
-  #     - SMTP_USER=${SMTP_USER}
-  #     - SMTP_PASSWORD=${SMTP_PASSWORD}
-  #     - ENV_MODE=${ENV_MODE} 
-  #   ports:
-  #     - '3000:3000'
-  #   container_name: service_auth
-  #   restart: always
-  #   networks:
-  #     backend-001:
-  #     frontend-001:
-  #   extra_hosts:
-  #     - "host.docker.internal:host-gateway"
   licensing:
     build: 
       context: ./licensing
     image: anysystem-service/licensing
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=${LICENSING_DATABASE_URL}
       - ENV_MODE=${ENV_MODE} 
       - API_TOKEN=${API_TOKEN}
     ports:
-      - '3001:3000'
+      - '3000:3000'
     container_name: service_licensing
     restart: always
     networks:
@@ -41,7 +21,7 @@ services:
       dockerfile: Dockerfile.grpc
     image: anysystem-service/licensing-grpc
     environment:
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=${LICENSING_DATABASE_URL}
       - ENV_MODE=${ENV_MODE} 
       - API_TOKEN=${API_TOKEN}
     ports:
@@ -50,6 +30,26 @@ services:
     restart: always
     networks:
       backend-001:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  auth:
+    build: 
+      context: ./auth
+    image: anysystem-service/auth
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - ENV_MODE=${ENV_MODE} 
+    ports:
+      - '3001:3000'
+    container_name: service_auth
+    restart: always
+    networks:
+      backend-001:
+      frontend-001:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

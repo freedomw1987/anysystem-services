@@ -1,4 +1,4 @@
-FROM oven/bun:alpine
+FROM oven/bun:latest
 WORKDIR /usr/src/app
 
 COPY package.json bun.lockb tsconfig.json ./
