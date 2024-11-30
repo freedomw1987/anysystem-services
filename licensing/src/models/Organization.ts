@@ -7,14 +7,14 @@ const prisma = new PrismaClient();
 export const GetOrgSchema = t.Object({
   id: t.String({
     description: "The UUID of the organization",
-    examples: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
+    examples: ["1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"],
   }),
 });
 
 export const GetOrgResponseSchema = t.Object({
   id: t.String({
     description: "The UUID of the organization",
-    examples: "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed",
+    examples: ["1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed"],
   }),
   alias: t.String({
     description: "The alias of the organization",
