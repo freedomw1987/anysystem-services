@@ -44,6 +44,8 @@ export const OrgController = new Elysia({ prefix: "/org" })
     {
       detail: {
         summary: "Get an organization",
+        description:
+          "Get an organization. requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Organization"],
       },
       query: GetOrgSchema,
@@ -95,6 +97,8 @@ export const OrgController = new Elysia({ prefix: "/org" })
     {
       detail: {
         summary: "Create an organization",
+        description:
+          "Create an organization. requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Organization"],
       },
       body: CreateOrgSchema,
@@ -146,6 +150,8 @@ export const OrgController = new Elysia({ prefix: "/org" })
     {
       detail: {
         summary: "Update an organization",
+        description:
+          "Update an organization. requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Organization"],
       },
       body: UpdateOrgSchema,
@@ -196,6 +202,8 @@ export const OrgController = new Elysia({ prefix: "/org" })
     {
       detail: {
         summary: "Delete an organization",
+        description:
+          "Delete an organization. requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["Organization"],
       },
       body: DeleteOrgSchema,

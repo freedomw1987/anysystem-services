@@ -1,7 +1,6 @@
 import { credentials, Metadata } from "@grpc/grpc-js";
 import { OrganizationServiceClient } from "./proto/organization";
 import { LicenseServiceClient } from "./proto/license";
-import { API_TOKEN } from "./constants/config";
 
 // grpc client example
 
@@ -16,7 +15,7 @@ const licenseClient = new LicenseServiceClient(
 );
 
 const metadata = new Metadata();
-metadata.set("authorization", "Bearer " + API_TOKEN);
+// metadata.set("authorization", "Bearer " + API_TOKEN);
 
 // // Create an organization
 // const req = {

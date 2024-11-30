@@ -1,13 +1,12 @@
 import { type ServerUnaryCall } from "@grpc/grpc-js";
-import { API_TOKEN } from "../../constants/config";
+import { isAuth } from "../../models/Auth";
 
 export const authenticate = (call: ServerUnaryCall<any, any>) => {
   const token = call.metadata.get("authorization");
-  if (!token) {
+  if (!token?.[0]) {
     return false;
   }
-  if (token[0] !== "Bearer " + API_TOKEN) {
-    return false;
-  }
-  return true;
+  const bearer = (token[0] as string).replace("Bearer ", "");
+
+  return isAuth(bearer);
 };

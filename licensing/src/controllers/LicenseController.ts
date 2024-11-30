@@ -38,6 +38,8 @@ export const LicenseController = new Elysia({ prefix: "/license" })
     {
       detail: {
         summary: "Create a license",
+        description:
+          "Create a license. requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["License"],
       },
       body: CreateLicenseSchema,
@@ -89,6 +91,8 @@ export const LicenseController = new Elysia({ prefix: "/license" })
     {
       detail: {
         summary: "Check a license",
+        description:
+          "Check a license. requires Bearer token. Please get token from POST /auth/signin endpoint",
         tags: ["License"],
       },
       query: CheckLicenseSchema,

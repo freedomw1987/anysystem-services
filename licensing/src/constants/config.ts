@@ -1,2 +1,2 @@
-export const API_TOKEN =
-  process.env.API_TOKEN || "Z3FqJ98x3TUfsPw1tiOOO8HydIyHiJX1";
+export const SECRET_KEY = process.env.SECRET_KEY || "secret";
+export const SECRET_EXPIRES = process.env.SECRET_EXPIRES || "7d";
